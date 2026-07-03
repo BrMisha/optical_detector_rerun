@@ -3346,6 +3346,16 @@ impl App {
         store_hub.entity_db(recording_id)
     }
 
+    /// Returns a [`re_chunk_store::LatestAtQuery`] for the active recording's current timeline
+    /// position, suitable for querying frame data from [`Self::recording_db`].
+    pub fn current_query(&self) -> Option<re_chunk_store::LatestAtQuery> {
+        let store_id = self.active_recording_id()?;
+        self.state
+            .time_controls
+            .get(store_id)
+            .map(|tc| tc.current_query())
+    }
+
     pub fn active_blueprint_db(&self) -> Option<&EntityDb> {
         let store_hub = self.store_hub.as_ref()?;
         let recording_id = self.active_recording_id()?;
